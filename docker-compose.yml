@@ -27,6 +27,22 @@ services:
       DB_PASSWORD: todo
       DB_NAME: tododb
       DB_PORT: 5432
+      GITHUB_OWNER: ${GITHUB_OWNER}
+      GITHUB_REPO: ${GITHUB_REPO}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      GITHUB_WEBHOOK_SECRET: ${GITHUB_WEBHOOK_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_SECURE: ${SMTP_SECURE}
+      ALERT_FROM: ${ALERT_FROM}
+      ALERT_TO: ${ALERT_TO}
+      POLL_ENABLED: ${POLL_ENABLED:-true}
+      POLL_INTERVAL_MS: ${POLL_INTERVAL_MS:-60000}
+      POLL_PER_PAGE: ${POLL_PER_PAGE:-50}
+      LOOKBACK_DAYS: ${LOOKBACK_DAYS:-30}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:3000}
     depends_on:
       db:
         condition: service_healthy

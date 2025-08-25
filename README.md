@@ -100,6 +100,36 @@ docker-compose up --build
 - Backend API: http://localhost:5000
 - Database: localhost:5432
 
+## 📈 CI/CD Health Monitor
+
+Backend endpoints:
+- `GET /api/metrics/summary`
+- `GET /api/metrics/trends?windowDays=7`
+- `GET /api/runs/recent?limit=50`
+- `POST /webhook/github` (expects `workflow_run` events)
+- `POST /api/alerts/test`
+
+Frontend routes:
+- `/` — To-Do app
+- `/monitor` — CI/CD Health dashboard
+
+Environment:
+- `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_TOKEN`
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`
+- `ALERT_FROM`, `ALERT_TO`
+- `GITHUB_WEBHOOK_SECRET` (optional)
+- `POLL_ENABLED`, `POLL_INTERVAL_MS`, `POLL_PER_PAGE`, `LOOKBACK_DAYS`
+
+Runbook:
+- Health: `curl http://localhost:5000/health`
+- Summary: `curl http://localhost:5000/api/metrics/summary`
+- Test email: `curl -X POST http://localhost:5000/api/alerts/test`
+- GitHub webhook:
+  - URL: `http://<host>/webhook/github`
+  - Content type: `application/json`
+  - Secret: `GITHUB_WEBHOOK_SECRET`
+  - Events: `workflow runs`
+
 ## 🔄 CI/CD Pipeline
 
 ### CI Workflow (`.github/workflows/ci.yml`)
