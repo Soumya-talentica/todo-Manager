@@ -31,13 +31,13 @@ jobs:
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "CI succeeded"
-          text: "Workflow ${{ github.workflow }} run ${{ github.run_number }} succeeded for ${{ github.repository }}@${{ github.sha }}."
+          raw: |
+            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Succeeded","text":"CI succeeded: ${{ github.repository }}#${{ github.run_number }}"}
 
       - name: Notify MS Teams (failure)
         if: failure()
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "CI failed"
-          text: "Workflow ${{ github.workflow }} run ${{ github.run_number }} failed for ${{ github.repository }}@${{ github.sha }}. See run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          raw: |
+            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Failed","text":"CI failed: ${{ github.repository }}#${{ github.run_number }}"}

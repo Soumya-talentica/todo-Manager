@@ -55,13 +55,13 @@ jobs:
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "CD succeeded"
-          text: "Deployment succeeded on ${{ secrets.DEPLOY_HOST }}. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          raw: |
+            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CD Succeeded","text":"CD succeeded on ${{ secrets.DEPLOY_HOST }}: ${{ github.repository }}#${{ github.run_number }}"}
 
       - name: Notify MS Teams (failure)
         if: failure()
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          title: "CD failed"
-          text: "Deployment failed on ${{ secrets.DEPLOY_HOST }}. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          raw: |
+            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CD Failed","text":"CD failed on ${{ secrets.DEPLOY_HOST }}: ${{ github.repository }}#${{ github.run_number }}"}
