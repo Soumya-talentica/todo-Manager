@@ -26,18 +26,18 @@ jobs:
         working-directory: backend
         run: npm install
 
-      - name: Notify MS Teams (success)
-        if: success()
-        uses: skitionek/notify-microsoft-teams@v1.0.9
-        with:
-          webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          raw: |
-            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Succeeded","text":"CI succeeded: ${{ github.repository }}#${{ github.run_number }}"}
+      # - name: Notify MS Teams (success)
+      #   if: success()
+      #   uses: skitionek/notify-microsoft-teams@v1.0.9
+      #   with:
+      #     webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
+      #     raw: |
+      #       {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Succeeded","text":"CI succeeded: ${{ github.repository }}#${{ github.run_number }}"}
 
-      - name: Notify MS Teams (failure)
-        if: failure()
-        uses: skitionek/notify-microsoft-teams@v1.0.9
-        with:
-          webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          raw: |
-            {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Failed","text":"CI failed: ${{ github.repository }}#${{ github.run_number }}"}
+      # - name: Notify MS Teams (failure)
+      #   if: failure()
+      #   uses: skitionek/notify-microsoft-teams@v1.0.9
+      #   with:
+      #     webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
+      #     raw: |
+      #       {"@type":"MessageCard","@context":"https://schema.org/extensions","summary":"CI Failed","text":"CI failed: ${{ github.repository }}#${{ github.run_number }}"}
