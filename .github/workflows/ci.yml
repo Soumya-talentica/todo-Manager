@@ -32,8 +32,8 @@ jobs:
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
           title: "CI succeeded"
-          text: "Workflow ${{ github.workflow }}
-          
+          text: "Workflow ${{ github.workflow }} run ${{ github.run_number }} succeeded for ${{ github.repository }}@${{ github.sha }}."
+
       - name: Notify MS Teams (failure)
         if: failure()
         uses: skitionek/notify-microsoft-teams@v1.0.9
