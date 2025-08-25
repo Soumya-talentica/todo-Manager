@@ -2,6 +2,10 @@
 
 A full-stack todo application with React frontend, Node.js backend, and PostgreSQL database.
 
+> 📋 **Requirements Analysis**: See [Requirement_analysis_document.md](./Requirement_analysis_document.md) for a comprehensive analysis of functional and non-functional requirements, technical architecture, and implementation details.
+> 
+> 🏗️ **Technical Design**: See [Tech_design_document.md](./Tech_design_document.md) for detailed technical specifications, architecture diagrams, and implementation guidelines.
+
 ## 🚀 Features
 
 - Create, read, update, and delete todos
@@ -224,6 +228,4 @@ Runbook:
 4. Run tests and linting
 5. Submit a pull request
 
-## 📄 License
 
-This project is licensed under the MIT License.

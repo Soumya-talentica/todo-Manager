@@ -18,6 +18,8 @@ Node.js + Express API for To-Do List. Connects to PostgreSQL using Sequelize.
 - `GITHUB_REPO` — Repository name
 - `GITHUB_TOKEN` — (optional) PAT or GitHub App token with `actions:read`
 
+You can use the `.env.example` at the repo root as a template for required variables.
+
 ### Webhook and Alerting
 - `POST /webhook/github` — Accepts `workflow_run` events. Sends email on failures.
 - `POST /api/alerts/test` — Sends a test email.

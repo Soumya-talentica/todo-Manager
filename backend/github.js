@@ -2,8 +2,10 @@ const assert = require('assert');
 
 function getGithubConfig() {
   const { GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO } = process.env;
-  assert(GITHUB_OWNER, 'GITHUB_OWNER is required');
-  assert(GITHUB_REPO, 'GITHUB_REPO is required');
+  if (process.env.NODE_ENV === 'production') {
+    assert(GITHUB_OWNER, 'GITHUB_OWNER is required');
+    assert(GITHUB_REPO, 'GITHUB_REPO is required');
+  }
   return { token: GITHUB_TOKEN, owner: GITHUB_OWNER, repo: GITHUB_REPO };
 }
 
