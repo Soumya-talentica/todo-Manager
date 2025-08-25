@@ -3,8 +3,6 @@ name: CD
 on:
   push:
     branches: [main]
-    # Only run on merge commits (not every push)
-    types: [merged]
   workflow_dispatch:
 
 jobs:
@@ -55,8 +53,28 @@ jobs:
           ssh -i deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
             cd ~/todo-Manager && \
             docker-compose pull && \
+            docker-compose down && \
             docker-compose up -d && \
             docker system prune -f
+          '
+
+      - name: Wait for services to be ready
+        run: |
+          echo "Waiting for services to be ready..."
+          sleep 30
+
+      - name: Verify deployment
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          ssh -i deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
+            echo "Checking service status..." && \
+            docker-compose ps && \
+            echo "Checking backend health..." && \
+            curl -f http://localhost:5000/health || echo "Backend health check failed" && \
+            echo "Checking frontend..." && \
+            curl -f http://localhost:3000 || echo "Frontend check failed"
           '
 
       - name: Notify MS Teams
@@ -64,5 +82,3 @@ jobs:
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          status: ${{ job.status }}
-          message: 'CD for ${{ github.repository }}: ${{ job.status }}'

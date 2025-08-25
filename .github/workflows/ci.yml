@@ -26,12 +26,22 @@ jobs:
       - name: Run frontend lint
         working-directory: frontend
         run: |
-          if [ -f package.json ] && jq -e '.scripts.lint' package.json > /dev/null; then npm run lint; else echo "No lint script"; fi
+          if npm run lint; then
+            echo "Frontend lint passed"
+          else
+            echo "Frontend lint failed or script not found"
+            exit 1
+          fi
 
       - name: Run frontend tests
         working-directory: frontend
         run: |
-          if [ -f package.json ] && jq -e '.scripts.test' package.json > /dev/null; then npm test -- --watchAll=false; else echo "No test script"; fi
+          if npm run test; then
+            echo "Frontend tests passed"
+          else
+            echo "Frontend tests failed or script not found"
+            exit 1
+          fi
 
       - name: Install backend dependencies
         working-directory: backend
@@ -40,20 +50,33 @@ jobs:
       - name: Run backend lint
         working-directory: backend
         run: |
-          if [ -f package.json ] && jq -e '.scripts.lint' package.json > /dev/null; then npm run lint; else echo "No lint script"; fi
+          if npm run lint; then
+            echo "Backend lint passed"
+          else
+            echo "Backend lint failed or script not found"
+            exit 1
+          fi
 
       - name: Run backend tests
         working-directory: backend
         run: |
-          if [ -f package.json ] && jq -e '.scripts.test' package.json > /dev/null; then npm test -- --watchAll=false; else echo "No test script"; fi
+          if npm run test; then
+            echo "Backend tests passed"
+          else
+            echo "Backend tests failed or script not found"
+            exit 1
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Docker Compose build
-        run: docker-compose build
+        run: |
+          docker-compose build --no-cache
+          echo "Docker build completed successfully"
 
       - name: Notify MS Teams
         if: always()
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          status: ${{ job.status }}
-          message: 'CI for ${{ github.repository }} on ${{ github.ref }}: ${{ job.status }}'
