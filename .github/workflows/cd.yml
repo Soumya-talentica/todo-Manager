@@ -12,51 +12,51 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare SSH key
-        shell: bash
-        run: |
-          if [[ "$DEPLOY_KEY" == *"BEGIN OPENSSH PRIVATE KEY"* || "$DEPLOY_KEY" == *"BEGIN RSA PRIVATE KEY"* ]]; then
-            printf "%s" "$DEPLOY_KEY" > deploy_key
-          else
-            printf "%s" "$DEPLOY_KEY" | base64 -d > deploy_key || {
-              echo "Failed to base64-decode DEPLOY_KEY" >&2; exit 1;
-            }
-          fi
-          chmod 600 deploy_key
-        env:
-          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+      - name: Sync files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: .
+          target: ~/todo-Manager
+          overwrite: true
+          rm: false
+          strip_components: 0
+          exclude: |
+            .git
+            node_modules
+            frontend/node_modules
+            backend/node_modules
 
-      - name: Sync compose and app files
-        run: |
-          rsync -avr -e "ssh -i deploy_key -o StrictHostKeyChecking=no" \
-            --exclude ".git" --exclude "node_modules" --exclude "frontend/node_modules" --exclude "backend/node_modules" \
-            ./ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:~/todo-Manager/
-
-      - name: Deploy via docker-compose on remote
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          ssh -i deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
-            cd ~/todo-Manager && \
-            docker-compose pull || true && \
-            docker-compose down && \
-            docker-compose up -d --build && \
+      - name: Deploy via docker-compose
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            set -e
+            cd C:\Users\SoumyaM\OneDrive - Talentica Software (I) Pvt. Ltd\Documents\todo-Manager
+            docker-compose pull || true
+            docker-compose down
+            docker-compose up -d --build
             docker system prune -f || true
-          '
 
       - name: Verify services
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          ssh -i deploy_key -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST '
-            echo "Checking services..." && \
-            docker-compose ps && \
-            curl -sf http://localhost:5000/health && \
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            set -e
+            cd C:\Users\SoumyaM\OneDrive - Talentica Software (I) Pvt. Ltd\Documents\todo-Manager
+            docker-compose ps
+            curl -sf http://localhost:5000/health
             curl -sf http://localhost:3000 >/dev/null
-          '
 
+      # Teams notifications are optional; kept minimal to avoid circular JSON issues
       # - name: Notify MS Teams (success)
       #   if: success()
       #   uses: skitionek/notify-microsoft-teams@v1.0.9
