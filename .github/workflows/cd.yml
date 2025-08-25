@@ -61,7 +61,7 @@ jobs:
 
       - name: Notify MS Teams
         if: always()
-        uses: skitionek/notify-microsoft-teams@v1.2.6
+        uses: skitionek/notify-microsoft-teams@v1.2.5
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
           status: ${{ job.status }}
