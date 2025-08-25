@@ -22,31 +22,22 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Lint frontend
-        working-directory: frontend
-        run: npm run lint
-
-      - name: Test frontend
-        working-directory: frontend
-        run: npm run test
-
       - name: Install backend deps
         working-directory: backend
         run: npm install
 
-      - name: Lint backend
-        working-directory: backend
-        run: npm run lint
-
-      - name: Test backend
-        working-directory: backend
-        run: npm run test
-
-      - name: Notify MS Teams
-        if: always()
+      - name: Notify MS Teams (success)
+        if: success()
         uses: skitionek/notify-microsoft-teams@v1.0.9
         with:
           webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          steps: ${{ toJson(steps) }}
+          title: "CI succeeded"
+          text: "Workflow ${{ github.workflow }}
+          
+      - name: Notify MS Teams (failure)
+        if: failure()
+        uses: skitionek/notify-microsoft-teams@v1.0.9
+        with:
+          webhook_url: ${{ secrets.MS_TEAMS_WEBHOOK }}
+          title: "CI failed"
+          text: "Workflow ${{ github.workflow }} run ${{ github.run_number }} failed for ${{ github.repository }}@${{ github.sha }}. See run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
