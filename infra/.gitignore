@@ -1,0 +1,115 @@
+# Infrastructure .gitignore
+# =========================
+
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.auto.tfvars
+
+# SSH Keys and Certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+*.env
+
+# SSL Certificates
+ssl/
+certs/
+*.crt
+*.key
+*.pem
+
+# Logs
+*.log
+logs/
+log/
+
+# Backup files
+*.backup
+*.bak
+backup/
+backups/
+*backup*
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# AWS and Cloud files
+.aws/
+aws-exports.js
+
+# Secrets and Credentials
+secrets/
+credentials/
+*.secret
+*.credential
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Deployment artifacts
+deployment-artifacts/
+deploy-logs/
+
+# Health check reports
+health-reports/
+health-check-*.txt
+
+# Monitoring data
+metrics/
+monitoring/
+cloudwatch-logs/
+
+# Security scan results
+security-scan-results/
+vulnerability-reports/
+
+# Compliance reports
+compliance-reports/
+
+# Audit logs
+audit-logs/
+
+# Local development overrides
+local/
+dev-overrides/
+
+# Custom sensitive patterns
+# Add any project-specific sensitive files here

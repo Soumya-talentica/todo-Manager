@@ -1,0 +1,51 @@
+# Example Terraform variables file
+# Copy this file to terraform.tfvars and update with your values
+
+# AWS Configuration
+aws_region = "ap-south-1"
+project_name = "todo-manager"
+environment = "dev"
+owner = "DevOps Team"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+public_subnet_cidr = "10.0.1.0/24"
+
+# EC2 Configuration
+instance_type = "t3.small"
+volume_size = 20
+key_pair_name = "todo"  # Leave empty to create new key pair
+#public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC..."  # Required if key_pair_name is empty
+
+# Security Configuration
+allowed_cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production!
+create_eip = false
+
+# Monitoring Configuration
+log_retention_days = 14
+
+# Application Configuration
+github_owner = "Soumya-talentica"
+github_repo = "todo-Manager"
+domain_name = "your-domain.com"  # Optional
+
+# Database Configuration
+db_password = "your-secure-database-password"
+
+# Email Configuration (for CI/CD alerts)
+smtp_host = "smtp.gmail.com"
+smtp_user = "test@gmail.com"
+smtp_password = "test"  # Use app-specific password for Gmail
+alert_from = "test@gmail.com"
+alert_to = "test@yourcompany.com"
+
+# GitHub Configuration
+github_token = "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"
+github_webhook_secret = "your-webhook-secret"
+
+# Application Settings
+frontend_origin = "http://your-domain.com"  # Will be set to instance IP if empty
+poll_enabled = true
+poll_interval_ms = 60000
+poll_per_page = 50
+lookback_days = 30
