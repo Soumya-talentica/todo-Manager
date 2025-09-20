@@ -50,7 +50,7 @@ check_requirements() {
     fi
     
     # Check if docker-compose is available
-    if ! command -v docker-compose > /dev/null 2>&1; then
+    if ! command -v docker compose > /dev/null 2>&1; then
         log_error "docker-compose is not installed"
         exit 1
     fi
@@ -155,12 +155,12 @@ deploy_containers() {
     # Pull latest images (if using ECR or custom registry)
     if [ -n "$BACKEND_IMAGE" ] || [ -n "$FRONTEND_IMAGE" ]; then
         log_info "Pulling latest images..."
-        docker-compose -f "$DOCKER_COMPOSE_FILE" pull
+        docker compose -f "$DOCKER_COMPOSE_FILE" pull
     fi
     
     # Stop existing containers
     log_info "Stopping existing containers..."
-    docker-compose -f "$DOCKER_COMPOSE_FILE" down || true
+    docker compose -f "$DOCKER_COMPOSE_FILE" down || true
     
     # Remove unused images
     log_info "Cleaning up unused images..."
@@ -168,7 +168,7 @@ deploy_containers() {
     
     # Start new containers
     log_info "Starting new containers..."
-    docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
+    docker compose -f "$DOCKER_COMPOSE_FILE" up -d
     
     log_success "Containers deployed"
 }
@@ -183,8 +183,8 @@ wait_for_services() {
         log_info "Health check attempt $attempt/$max_attempts"
         
         # Check if all containers are running
-        local running_containers=$(docker-compose -f "$DOCKER_COMPOSE_FILE" ps -q | wc -l)
-        local healthy_containers=$(docker-compose -f "$DOCKER_COMPOSE_FILE" ps | grep -c "Up (healthy)")
+        local running_containers=$(docker compose -f "$DOCKER_COMPOSE_FILE" ps -q | wc -l)
+        local healthy_containers=$(docker compose -f "$DOCKER_COMPOSE_FILE" ps | grep -c "Up (healthy)")
         
         if [ "$running_containers" -gt 0 ] && [ "$healthy_containers" -gt 0 ]; then
             log_success "Services are ready"
@@ -249,10 +249,10 @@ show_deployment_info() {
     echo "Monitor Dashboard: http://$(curl -s ifconfig.me)/monitor"
     echo
     echo "Useful Commands:"
-    echo "  View logs: docker-compose -f $DOCKER_COMPOSE_FILE logs"
-    echo "  Check status: docker-compose -f $DOCKER_COMPOSE_FILE ps"
-    echo "  Restart: docker-compose -f $DOCKER_COMPOSE_FILE restart"
-    echo "  Stop: docker-compose -f $DOCKER_COMPOSE_FILE down"
+    echo "  View logs: docker compose -f $DOCKER_COMPOSE_FILE logs"
+    echo "  Check status: docker compose -f $DOCKER_COMPOSE_FILE ps"
+    echo "  Restart: docker compose -f $DOCKER_COMPOSE_FILE restart"
+    echo "  Stop: docker compose -f $DOCKER_COMPOSE_FILE down"
     echo
     echo "Health Check Script: $APP_DIR/health-check.sh"
     echo "=========================================="
@@ -261,7 +261,7 @@ show_deployment_info() {
 show_logs() {
     log_info "Showing recent logs..."
     echo
-    docker-compose -f "$DOCKER_COMPOSE_FILE" logs --tail=50
+    docker compose -f "$DOCKER_COMPOSE_FILE" logs --tail=50
 }
 
 # Main execution
