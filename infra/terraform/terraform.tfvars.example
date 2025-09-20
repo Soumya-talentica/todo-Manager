@@ -40,7 +40,7 @@ alert_from = "test@gmail.com"
 alert_to = "test@yourcompany.com"
 
 # GitHub Configuration
-github_token = "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"
+github_token = "xxxxx"
 github_webhook_secret = "your-webhook-secret"
 
 # Application Settings
